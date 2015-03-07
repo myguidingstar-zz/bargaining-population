@@ -8,7 +8,8 @@
 
 (def init (atom {:high 2
                  :medium 2
-                 :low 2}))
+                 :low 2
+                 :accumulator 2}))
 
 (def config (atom {:rounds-per-match 3
                    :payoff-aggregator :mean
