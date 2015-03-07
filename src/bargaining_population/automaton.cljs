@@ -9,6 +9,23 @@
                        [1 :medium 1]
                        [1 :low 1]]})
 
+(def accumulator
+  {:name :accumulator
+   :state-id 1
+   :state-ids #{1 2 3}
+   :state-strategies {1 :high
+                      2 :medium
+                      3 :low}
+   :state-transitions [[1 :high 3]
+                       [1 :medium 2]
+                       [1 :low 1]
+                       [2 :high 3]
+                       [2 :medium 2]
+                       [2 :low 1]
+                       [3 :high 3]
+                       [3 :medium 2]
+                       [3 :low 1]]})
+
 (defn fsm->strategy [fsm]
   (get (-> fsm :state-strategies)
        (-> fsm :state-id)))
