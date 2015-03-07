@@ -2,7 +2,7 @@
   (:require [rum :include-macros true]
             [bargaining-population.automaton :refer [initial-automaton]]
             [bargaining-population.cycle :refer [run-cycle]]
-            [bargaining-population.match :refer [standard-deviation]]))
+            [bargaining-population.match :refer [mean]]))
 
 (def status (atom :stopped))
 
@@ -20,9 +20,9 @@
 
 (def payoff-cycles (atom []))
 
-(def payoff-sd-cycles (atom []))
+(def payoff-mean-cycles (atom []))
 
-(def max-payoff-sd (atom 0))
+(def max-payoff-mean (atom 0))
 
 (def selected-cyle (atom 0))
 
@@ -44,11 +44,11 @@
   (apply + (vals init)))
 
 (defn update-cycles! [population payoffs]
-  (let [payoff-sd (standard-deviation payoffs)]
+  (let [payoff-mean (mean payoffs)]
     (swap! population-cycles #(conj % population))
     (swap! payoff-cycles #(conj % payoffs))
-    (swap! payoff-sd-cycles #(conj % payoff-sd))
-    (swap! max-payoff-sd #(max % payoff-sd))))
+    (swap! payoff-mean-cycles #(conj % payoff-mean))
+    (swap! max-payoff-mean #(max % payoff-mean))))
 
 (defn init! []
   (let [[population payoffs]
@@ -139,13 +139,13 @@
     [:.ui.red.button {:on-click #(do (reset! status :stopped)
                                      (reset! population-cycles [])
                                      (reset! payoff-cycles [])
-                                     (reset! payoff-sd-cycles [])
-                                     (reset! max-payoff-sd 0)
+                                     (reset! payoff-mean-cycles [])
+                                     (reset! max-payoff-mean 0)
                                      nil)}
      "Stop"]))
 
-(rum/defc column < rum/reactive [i payoff-sd]
-  (let [mps (rum/react max-payoff-sd)]
+(rum/defc column < rum/reactive [i payoff-mean]
+  (let [mps (rum/react max-payoff-mean)]
     (when (< 0 mps)
       [:div.column {:key i
                     :style {:background-color
@@ -156,12 +156,12 @@
         {:style {:background-color
                  (if (= i (rum/react selected-cyle))
                    "red" "#369")
-                 :height (str (* 100 (/ payoff-sd mps))
+                 :height (str (* 100 (/ payoff-mean mps))
                               "%")}}]])))
 
 (rum/defc chart < rum/reactive []
   [:div.chart {:style {:height (str "300px")}}
-   (let [the-cycles (rum/react payoff-sd-cycles)]
+   (let [the-cycles (rum/react payoff-mean-cycles)]
      (for [i (range (count the-cycles))]
        (column i (nth the-cycles i))))])
 
@@ -171,8 +171,8 @@
      [:div (str "Payoffs: "
                 (nth (rum/react payoff-cycles)
                      (rum/react selected-cyle)))]
-     [:div (str "Standard deviation: "
-                (nth (rum/react payoff-sd-cycles)
+     [:div (str "Payoff mean: "
+                (nth (rum/react payoff-mean-cycles)
                      (rum/react selected-cyle)))]
      [:div (str "Population: ")
       (for [automaton (nth (rum/react population-cycles)
