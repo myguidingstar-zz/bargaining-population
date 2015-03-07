@@ -1,8 +1,8 @@
 (ns bargaining-population.automaton)
 
 (defn pure-strategy [strategy]
-  {:state-id 1
-   :next-id 2
+  {:name (keyword (str "all-" (name strategy)))
+   :state-id 1
    :state-ids #{1}
    :state-strategies {1 strategy}
    :state-transitions [[1 :high 1]
