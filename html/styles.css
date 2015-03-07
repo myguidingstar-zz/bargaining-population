@@ -1,0 +1,22 @@
+.chart {
+    overflow-x: scroll;
+    border: 0;
+    margin: 0;
+    position: relative;
+}
+.chart .column {
+    cursor: pointer;
+    height: 100%;
+    float: left;
+    border: 0;
+    margin: 0;
+    width: 10px;
+    position: relative;
+}
+.column .item {
+   position: absolute;
+   bottom:0;
+   border: 0;
+   margin: 0;
+   width: 100%;
+}
