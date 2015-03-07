@@ -34,10 +34,10 @@
                    :value (str (get (rum/react init) type))
                    :on-change #(do (swap! init assoc type
                                           (-> % .-target .-value js/parseInt)) nil)}]])
-       (mapcat [:high :medium :low]))])
+       (mapcat [:high :medium :low :accumulator]))])
 
 (defn initialize [init]
-  (mapcat (fn [[k v]] (repeat v (pure-strategy k)))
+  (mapcat (fn [[k v]] (repeat v (initial-automaton k)))
           init))
 
 (defn population-size [init]
