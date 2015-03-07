@@ -177,7 +177,8 @@
      [:div (str "Population: ")
       (for [automaton (nth (rum/react population-cycles)
                            (rum/react selected-cyle))]
-        [:div (pr-str automaton)])]]))
+        [:div (str (name (:name automaton))
+                   "[" (:state-id automaton) "]")])]]))
 
 (rum/defc launch-board < rum/reactive []
   [:div
