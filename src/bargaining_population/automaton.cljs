@@ -26,6 +26,11 @@
                        [3 :medium 2]
                        [3 :low 1]]})
 
+(defn initial-automaton [strategy]
+  (if (= :accumulator strategy)
+    accumulator
+    (pure-strategy strategy)))
+
 (defn fsm->strategy [fsm]
   (get (-> fsm :state-strategies)
        (-> fsm :state-id)))
