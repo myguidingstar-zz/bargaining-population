@@ -1,6 +1,6 @@
 (ns bargaining-population.app
   (:require [rum :include-macros true]
-            [bargaining-population.automaton :refer [pure-strategy]]
+            [bargaining-population.automaton :refer [initial-automaton]]
             [bargaining-population.cycle :refer [run-cycle]]
             [bargaining-population.match :refer [standard-deviation]]))
 
