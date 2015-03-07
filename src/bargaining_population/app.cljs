@@ -14,8 +14,7 @@
 (def config (atom {:rounds-per-match 3
                    :payoff-aggregator :mean
                    :discount-rate 0.5
-                   :reproduction-size 2
-                   :mutation-probability 0.5}))
+                   :reproduction-size 2}))
 
 (def population-cycles (atom []))
 
