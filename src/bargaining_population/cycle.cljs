@@ -2,8 +2,7 @@
   (:require [bargaining-population.automaton
              :refer [random-true-by-probability randomize-by-frequencies]]
             [bargaining-population.match
-             :refer [match-results mean present-value-sum]]
-            [bargaining-population.mutation :refer [mutate]]))
+             :refer [match-results mean present-value-sum]]))
 
 (defn match-phase
   ""
@@ -24,13 +23,6 @@
   (let [new-born (repeatedly reproduction-size #(nth population (randomize-by-frequencies payoff-record)))]
     (concat new-born (drop reproduction-size population))))
 
-(defn mutation-phase
-  [population mutation-probability]
-  (map #(if (random-true-by-probability mutation-probability)
-          (mutate %)
-          %)
-       population))
-
 (defn run-cycle
   [{:keys [rounds-per-match payoff-aggregator
            discount-rate reproduction-size mutation-probability]}]
@@ -44,7 +36,6 @@
             payoffs (second after-matches)]
         [(-> after-matches
              (reproduction-phase reproduction-size)
-             (mutation-phase mutation-probability)
              shuffle)
          payoffs]))))
 
