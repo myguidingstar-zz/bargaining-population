@@ -77,12 +77,7 @@
    [:input {:type "number" :min 0 :max (population-size (rum/react init)) :step 1
             :value (str (get (rum/react config) :reproduction-size))
             :on-change #(do (swap! config assoc :reproduction-size
-                                   (-> % .-target .-value js/parseInt)) nil)}]
-   [:.ui.label "Mutation probability"]
-   [:input {:type "number" :min 0 :max 1 :step 0.1
-            :value (str (get (rum/react config) :mutation-probability))
-            :on-change #(do (swap! config assoc :mutation-probability
-                                   (-> % .-target .-value js/parseFloat)) nil)}]])
+                                   (-> % .-target .-value js/parseInt)) nil)}]])
 
 (rum/defc config-cycle-aggregator < rum/reactive []
   [:.ui.form
