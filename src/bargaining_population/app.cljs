@@ -6,15 +6,15 @@
 
 (def status (atom :stopped))
 
-(def init (atom {:high 2
-                 :medium 2
-                 :low 2
-                 :accommodator 2}))
+(def init (atom {:high 80
+                 :medium 0
+                 :low 20
+                 :accommodator 0}))
 
-(def config (atom {:rounds-per-match 3
+(def config (atom {:rounds-per-match 1
                    :payoff-aggregator :mean
                    :discount-rate 0.5
-                   :reproduction-size 2}))
+                   :reproduction-size 5}))
 
 (def population-cycles (atom []))
 
