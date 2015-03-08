@@ -1,4 +1,5 @@
 (ns bargaining-population.cycle
+  (:require-macros [lonocloud.synthread :as ->])
   (:require [bargaining-population.automaton
              :refer [random-true-by-probability randomize-by-frequencies]]
             [bargaining-population.match

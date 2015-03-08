@@ -8,6 +8,7 @@
                  [pandeiro/boot-http    "0.3.0"      :scope "test"]
                  [org.clojure/core.async "0.1.346.0-17112a-alpha"]
                  [org.clojure/clojurescript "0.0-2814"]
+                 [lonocloud/synthread "1.0.4"]
                  [rum "0.2.5"]
                  [datascript "0.7.2"]])
 
