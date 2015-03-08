@@ -26,10 +26,11 @@
                        [3 :medium 2]
                        [3 :low 1]]})
 
-(defn initial-automaton [strategy]
-  (if (= :accommodator strategy)
-    accommodator
-    (pure-strategy strategy)))
+(def initial-automaton
+  {:all-high (pure-strategy :high)
+   :all-medium (pure-strategy :medium)
+   :all-low (pure-strategy :low)
+   :accommodator accommodator})
 
 (defn fsm->strategy [fsm]
   (get (-> fsm :state-strategies)
