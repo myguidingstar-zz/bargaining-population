@@ -9,7 +9,7 @@
 (def init (atom {:high 2
                  :medium 2
                  :low 2
-                 :accumulator 2}))
+                 :accommodator 2}))
 
 (def config (atom {:rounds-per-match 3
                    :payoff-aggregator :mean
@@ -34,7 +34,7 @@
                    :value (str (get (rum/react init) type))
                    :on-change #(do (swap! init assoc type
                                           (-> % .-target .-value js/parseInt)) nil)}]])
-       (mapcat [:high :medium :low :accumulator]))])
+       (mapcat [:high :medium :low :accommodator]))])
 
 (defn initialize [init]
   (mapcat (fn [[k v]] (repeat v (initial-automaton k)))

@@ -9,9 +9,9 @@
                        [1 :medium 1]
                        [1 :low 1]]})
 
-(def accumulator
-  {:name :accumulator
-   :state-id 1
+(def accommodator
+  {:name :accommodator
+   :state-id 2
    :state-ids #{1 2 3}
    :state-strategies {1 :high
                       2 :medium
@@ -27,8 +27,8 @@
                        [3 :low 1]]})
 
 (defn initial-automaton [strategy]
-  (if (= :accumulator strategy)
-    accumulator
+  (if (= :accommodator strategy)
+    accommodator
     (pure-strategy strategy)))
 
 (defn fsm->strategy [fsm]
