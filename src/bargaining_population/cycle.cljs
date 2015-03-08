@@ -31,11 +31,10 @@
                             #(mean %))]
     (fn [[population _]]
       (let [after-matches
-            (match-phase population rounds-per-match payoff-aggregator)
+            (match-phase (shuffle population) rounds-per-match payoff-aggregator)
             payoffs (second after-matches)]
         [(-> after-matches
-             (reproduction-phase reproduction-size)
-             shuffle)
+             (reproduction-phase reproduction-size))
          payoffs]))))
 
 (enable-console-print!)
