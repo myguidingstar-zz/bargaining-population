@@ -58,5 +58,20 @@
                   %)
             (range (count frequencies))))))
 
+(defn randomize-by-frequency-map
+  [frequency-map]
+  (let [frequencies (vals frequency-map)
+        ids (keys frequency-map)
+        random-id
+        (if (every? zero? frequencies)
+          (rand-int (count frequencies))
+          (let [thresholds (reductions + 0 frequencies)
+                random (rand (last thresholds))]
+            (some #(and (<= (nth thresholds %) random)
+                        (< random (nth thresholds (inc %)))
+                        %)
+                  (range (count frequencies)))))]
+    (nth ids random-id)))
+
 (defn random-true-by-probability [p]
   (zero? (randomize-by-frequencies [p (- 1 p)])))
