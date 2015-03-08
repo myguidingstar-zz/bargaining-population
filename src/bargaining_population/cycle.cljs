@@ -20,7 +20,11 @@
   `payoff-record` is a list of payoffs each of which can be either the avarge or present value of payoff sequence of a single automaton in the last match.
   the order of `payoff-record` is that of `population`."
   [[population payoff-record] reproduction-size]
-  (let [new-born (repeatedly reproduction-size #(nth population (randomize-by-frequencies (map inc payoff-record))))]
+  (let [new-born (repeatedly reproduction-size #(->> payoff-record
+                                                     (map inc)
+                                                     (aggregate-payoff-by-type population)
+                                                     randomize-by-frequency-map
+                                                     initial-automaton))]
     (concat new-born (drop reproduction-size population))))
 
 (defn run-cycle
