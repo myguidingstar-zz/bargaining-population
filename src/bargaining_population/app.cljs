@@ -175,10 +175,11 @@
                 (nth (rum/react payoff-mean-cycles)
                      (rum/react selected-cyle)))]
      [:div (str "Population: ")
-      (for [automaton (nth (rum/react population-cycles)
+      (let [automata (nth (rum/react population-cycles)
                            (rum/react selected-cyle))]
-        [:div (str (name (:name automaton))
-                   "[" (:state-id automaton) "]")])]]))
+        [:div
+         (str (-> (fn [acc automaton] (update-in acc [(:name automaton)] inc))
+                  (reduce {} automata)))])]]))
 
 (rum/defc launch-board < rum/reactive []
   [:div
