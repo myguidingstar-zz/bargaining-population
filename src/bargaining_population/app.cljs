@@ -34,7 +34,7 @@
                    :value (str (get (rum/react init) type))
                    :on-change #(do (swap! init assoc type
                                           (-> % .-target .-value js/parseInt)) nil)}]])
-       (mapcat [:high :medium :low :accommodator]))])
+       (mapcat [:all-high :all-medium :all-low :accommodator]))])
 
 (defn initialize [init]
   (mapcat (fn [[k v]] (repeat v (initial-automaton k)))
