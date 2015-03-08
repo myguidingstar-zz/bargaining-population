@@ -8,10 +8,10 @@
   ""
   [population rounds-per-match payoff-aggregator]
   (let [n (/ (count population) 2)
-        results (mapcat #(match-results % rounds-per-match)
-                        (partition 2 population))
-        new-population (mapcat #(nth results (* 2 %)) (range n))
-        payoff-seqs (mapcat #(nth results (inc (* 2 %))) (range n))]
+        results (map #(match-results % rounds-per-match)
+                     (partition 2 population))
+        new-population (mapcat :automaton-pair results)
+        payoff-seqs (mapcat :payoff-seq-pair results)]
     [new-population (map payoff-aggregator payoff-seqs)]))
 
 (defn reproduction-phase
