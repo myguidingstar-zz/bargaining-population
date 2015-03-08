@@ -75,3 +75,30 @@
 
 (defn random-true-by-probability [p]
   (zero? (randomize-by-frequencies [p (- 1 p)])))
+
+(defn aggregate-payoff-by-type* [population payoff-record]
+  (let [n (count population)]
+    (reduce (fn [acc i]
+              (let [type (:name (nth population i))]
+                (-> acc
+                    (update-in [type :total] #(+ % (nth payoff-record i)))
+                    (update-in [type :count] inc))))
+            {:all-high {:total 0
+                        :count 0}
+             :all-medium {:total 0
+                          :count 0}
+             :all-low {:total 0
+                       :count 0}
+             :accommodator {:total 0
+                            :count 0}}
+            (range n))))
+
+(defn aggregate-payoff-by-type [population payoff-record]
+  (->> (aggregate-payoff-by-type* population payoff-record)
+       (reduce (fn [acc [k v]]
+                 (->> (if (zero? (:count v))
+                        0
+                        (/ (:total v) (:count v)))
+                      (vector k)
+                      (conj acc)))
+               {})))
