@@ -1,6 +1,7 @@
 (ns bargaining-population.cycle
   (:require [bargaining-population.automaton
-             :refer [random-true-by-probability randomize-by-frequencies]]
+             :refer [initial-automaton random-true-by-probability
+                     randomize-by-frequency-map aggregate-payoff-by-type]]
             [bargaining-population.match
              :refer [match-results mean present-value-sum]]))
 
