@@ -51,7 +51,8 @@
          payoff-seq-2 []
          round rounds-per-match]
     (if (zero? round)
-      [fsm-pair [payoff-seq-1 payoff-seq-2]]
+      {:automaton-pair fsm-pair
+       :payoff-seq-pair [payoff-seq-1 payoff-seq-2]}
       (let [[payoff-1 payoff-2] (match->payoffs fsm-pair)]
         (recur (transit-automata fsm-pair)
                (conj payoff-seq-1 payoff-1)
