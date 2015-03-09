@@ -48,12 +48,14 @@ cycles'. The last cycle is the one that will be fed to the next
 (defn population-size [init]
   (apply + (vals init)))
 
-(defn update-cycles! [population payoffs]
+(defn update-cycles!
+  "Appends run-cycle results to relevant atoms."
+  [payoffs population-after]
   (let [payoff-mean (mean payoffs)]
-    (swap! population-cycles #(conj % population))
     (swap! payoff-cycles #(conj % payoffs))
     (swap! payoff-mean-cycles #(conj % payoff-mean))
-    (swap! max-payoff-mean #(max % payoff-mean))))
+    (swap! max-payoff-mean #(max % payoff-mean))
+    (swap! population-cycles #(conj % population-after))))
 
 (defn init! []
   (let [[population payoffs]
