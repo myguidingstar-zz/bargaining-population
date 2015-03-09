@@ -30,6 +30,22 @@ cycles'. The last cycle is the one that will be fed to the next
 
 (def selected-cyle (atom 0))
 
+(defn previous-selection! []
+  (when (< 0 @selected-cyle)
+    (swap! selected-cyle dec)))
+
+(defn next-selection! []
+  (when (< (inc @selected-cyle) (count @payoff-cycles))
+    (swap! selected-cyle inc)))
+
+(defn keyboard-navigate [event]
+  (case (.-keyCode event)
+    37 (previous-selection!)
+    39 (next-selection!)
+    nil))
+
+(.addEventListener js/window "keydown" keyboard-navigate)
+
 (rum/defc init-population < rum/reactive []
   [:.ui.labeled.input
    (-> (fn [type]
