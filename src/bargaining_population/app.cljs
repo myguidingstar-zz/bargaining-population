@@ -58,9 +58,11 @@ cycles'. The last cycle is the one that will be fed to the next
     (swap! population-cycles #(conj % population-after))))
 
 (defn init! []
-  (let [[population payoffs]
-        ((run-cycle @config) [(initialize @init) nil])]
-    (update-cycles! population payoffs)))
+  (let [population (initialize-population @init)
+        [population-after payoffs]
+        ((run-cycle @config) [population nil])]
+    (swap! population-cycles #(conj % population-after))
+    (update-cycles! payoffs population-after)))
 
 (defn next-cycle! []
   (let [[population payoffs]
