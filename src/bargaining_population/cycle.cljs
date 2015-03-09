@@ -14,7 +14,8 @@
                      (partition 2 population))
         new-population (mapcat :automaton-pair results)
         payoff-seqs (mapcat :payoff-seq-pair results)]
-    [new-population (map payoff-aggregator payoff-seqs)]))
+    {:population new-population
+     :payoffs (map payoff-aggregator payoff-seqs)}))
 
 (defn reproduction-phase
   "By convention, first five automata are killed and replaced with new generated ones.
