@@ -21,13 +21,12 @@
   "By convention, first five automata are killed and replaced with new generated ones.
   `payoff-record` is a list of payoffs each of which can be either the avarge or present value of payoff sequence of a single automaton in the last match.
   the order of `payoff-record` is that of `population`."
-  [[population payoff-record] reproduction-size]
-  (let [new-born (repeatedly reproduction-size #(->> payoff-record
-                                                     (map inc)
-                                                     (aggregate-payoff-by-type population)
-                                                     randomize-by-frequency-map
-                                                     initial-automaton))]
-    (concat new-born (drop reproduction-size population))))
+  [{:keys [population payoffs] :as data} reproduction-size]
+  (let [fitness  (->> (map inc payoffs)
+                      (aggregate-payoff-by-type population))
+        new-born (repeatedly reproduction-size
+                             #(-> fitness randomize-by-frequency-map initial-automaton))]
+    (assoc data :population (concat new-born (drop reproduction-size population)))))
 
 (defn run-cycle
   [{:keys [rounds-per-match payoff-aggregator
