@@ -1,14 +1,15 @@
 (ns bargaining-population.app
   (:require [rum :include-macros true]
-            [bargaining-population.automaton :refer [initial-automaton]]
+            [bargaining-population.automaton :refer
+             [initial-automaton automaton-name]]
             [bargaining-population.cycle :refer [run-cycle]]
             [bargaining-population.match :refer [mean]]))
 
 (def status (atom :stopped))
 
-(def init (atom {:high 80
+(def init (atom {:high 99
                  :medium 0
-                 :low 20
+                 :low 1
                  :accommodator 0}))
 
 (def config (atom {:rounds-per-match 1
@@ -34,7 +35,7 @@
                    :value (str (get (rum/react init) type))
                    :on-change #(do (swap! init assoc type
                                           (-> % .-target .-value js/parseInt)) nil)}]])
-       (mapcat [:all-high :all-medium :all-low :accommodator]))])
+       (mapcat [:high :medium :low :accommodator]))])
 
 (defn initialize [init]
   (mapcat (fn [[k v]] (repeat v (initial-automaton k)))
@@ -176,10 +177,12 @@
                      (rum/react selected-cyle)))]
      [:div (str "Population: ")
       (let [automata (nth (rum/react population-cycles)
-                           (rum/react selected-cyle))]
+                          (rum/react selected-cyle))]
         [:div
-         (str (-> (fn [acc automaton] (update-in acc [(:name automaton)] inc))
-                  (reduce {} automata)))])]]))
+         (str (reduce (fn [acc fsm]
+                        (update-in acc [(automaton-name fsm)] inc))
+                      {}
+                      automata))])]]))
 
 (rum/defc launch-board < rum/reactive []
   [:div
