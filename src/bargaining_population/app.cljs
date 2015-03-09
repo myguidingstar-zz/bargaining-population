@@ -75,15 +75,15 @@ cycles'. The last cycle is the one that will be fed to the next
 
 (defn init! []
   (let [population (initialize-population @init)
-        [population-after payoffs]
-        ((run-cycle @config) [population nil])]
+        {population-after :population :keys [payoffs]}
+        ((run-cycle @config) population)]
     (swap! population-cycles #(conj % population-after))
     (update-cycles! payoffs population-after)))
 
 (defn next-cycle! []
-  (let [[population-after payoffs]
-        ((run-cycle @config) [(last @population-cycles) (last @payoff-cycles)])]
-    (update-cycles! payoffs population-after)))
+  (let [{:keys [population payoffs]}
+        ((run-cycle @config) (last @population-cycles))]
+    (update-cycles! payoffs population)))
 
 (defn forever! []
   (js/setTimeout #(do (when (= :running @status)
