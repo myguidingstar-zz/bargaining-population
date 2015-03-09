@@ -16,15 +16,16 @@
     :accommodator
     strategy))
 
-(defn transit-state [{:keys [state-id state-transitions] :as fsm} opponent-state]
-  (first
-   (for [[from os to] state-transitions
-         :when (and (= from state-id)
-                    (= os opponent-state))]
-     to)))
+(def accommodator-transit
+  {:high :low
+   :medium :medium
+   :low :high})
 
-(defn transit-fsm [fsm opponent-state]
-  (assoc fsm :state-id (transit-state fsm opponent-state)))
+(defn transit-fsm
+  [{:keys [accommodator? strategy] :as fsm} opponent-state]
+  (if accommodator?
+    (assoc fsm :strategy (accommodator-transit opponent-state))
+    fsm))
 
 
 (defn randomize-by-frequencies
