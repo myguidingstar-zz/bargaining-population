@@ -60,16 +60,16 @@
 (defn aggregate-payoff-by-type* [population payoff-record]
   (let [n (count population)]
     (reduce (fn [acc i]
-              (let [type (:name (nth population i))]
+              (let [type (automaton-name (nth population i))]
                 (-> acc
                     (update-in [type :total] #(+ % (nth payoff-record i)))
                     (update-in [type :count] inc))))
-            {:all-high {:total 0
-                        :count 0}
-             :all-medium {:total 0
-                          :count 0}
-             :all-low {:total 0
-                       :count 0}
+            {:high         {:total 0
+                            :count 0}
+             :medium       {:total 0
+                            :count 0}
+             :low          {:total 0
+                            :count 0}
              :accommodator {:total 0
                             :count 0}}
             (range n))))
