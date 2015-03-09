@@ -40,9 +40,10 @@ cycles'. The last cycle is the one that will be fed to the next
                                           (-> % .-target .-value js/parseInt)) nil)}]])
        (mapcat [:high :medium :low :accommodator]))])
 
-(defn initialize [init]
-  (mapcat (fn [[k v]] (repeat v (initial-automaton k)))
-          init))
+(defn initialize-population [init]
+  (-> (fn [[k v]] (repeat v (initial-automaton k)))
+      (mapcat init)
+      shuffle))
 
 (defn population-size [init]
   (apply + (vals init)))
