@@ -65,9 +65,9 @@ cycles'. The last cycle is the one that will be fed to the next
     (update-cycles! payoffs population-after)))
 
 (defn next-cycle! []
-  (let [[population payoffs]
+  (let [[population-after payoffs]
         ((run-cycle @config) [(last @population-cycles) (last @payoff-cycles)])]
-    (update-cycles! population payoffs)))
+    (update-cycles! payoffs population-after)))
 
 (defn forever! []
   (js/setTimeout #(do (when (= :running @status)
