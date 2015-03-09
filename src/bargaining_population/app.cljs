@@ -175,7 +175,7 @@ cycles'. The last cycle is the one that will be fed to the next
        (column i (nth the-cycles i))))])
 
 (rum/defc inspector < rum/reactive []
-  (when (< 0 (count (rum/react population-cycles)))
+  (when (< 0 (count (rum/react payoff-cycles)))
     [:div
      [:div (str "Payoffs: "
                 (nth (rum/react payoff-cycles)
