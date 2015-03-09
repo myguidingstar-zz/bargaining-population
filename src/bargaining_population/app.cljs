@@ -166,6 +166,7 @@ cycles'. The last cycle is the one that will be fed to the next
                                      (reset! payoff-cycles [])
                                      (reset! payoff-mean-cycles [])
                                      (reset! max-payoff-mean 0)
+                                     (reset! selected-cyle 0)
                                      nil)}
      "Stop"]))
 
