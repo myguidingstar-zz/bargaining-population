@@ -28,7 +28,7 @@
                              #(-> fitness randomize-by-frequency-map initial-automaton))]
     (assoc data :population (concat new-born (drop reproduction-size population)))))
 
-(defn run-cycle
+(defn run-cycle*
   [{:keys [rounds-per-match payoff-aggregator
            discount-rate reproduction-size mutation-probability]}]
   (let [payoff-aggregator (if (and (= :present-value payoff-aggregator)
@@ -38,5 +38,7 @@
     (fn [population]
       (-> (match-phase (shuffle population) rounds-per-match payoff-aggregator)
           (reproduction-phase reproduction-size)))))
+
+(def run-cycle (memoize run-cycle*))
 
 (enable-console-print!)
