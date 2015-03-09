@@ -35,12 +35,8 @@
                                    (number? discount-rate))
                             #(present-value-sum discount-rate %)
                             #(mean %))]
-    (fn [[population _]]
-      (let [after-matches
-            (match-phase (shuffle population) rounds-per-match payoff-aggregator)
-            payoffs (second after-matches)]
-        [(-> after-matches
-             (reproduction-phase reproduction-size))
-         payoffs]))))
+    (fn [population]
+      (-> (match-phase (shuffle population) rounds-per-match payoff-aggregator)
+          (reproduction-phase reproduction-size)))))
 
 (enable-console-print!)
