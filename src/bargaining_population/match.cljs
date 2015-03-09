@@ -1,5 +1,5 @@
 (ns bargaining-population.match
-  (:require [bargaining-population.automaton :refer [fsm->strategy transit-fsm]]))
+  (:require [bargaining-population.automaton :refer [transit-fsm]]))
 
 (def claim-values
   {:high 8
@@ -18,14 +18,14 @@
   "Returns a pair of payoffs for an automaton pair considering what
   they should claim when they met."
   [fsm-pair]
-  (claims->payoffs (map fsm->strategy fsm-pair)))
+  (claims->payoffs (map :strategy fsm-pair)))
 
 (defn transit-automata
   "Transits a pair of auttomata to their new states as they react to
   each other during a match."
   [[fsm1 fsm2]]
-  (let [s1 (fsm->strategy fsm1)
-        s2 (fsm->strategy fsm2)
+  (let [s1 (:strategy fsm1)
+        s2 (:strategy fsm2)
         fsm1' (transit-fsm fsm1 s2)
         fsm2' (transit-fsm fsm2 s1)]
     [fsm1' fsm2']))
@@ -36,10 +36,11 @@
   they've changed states) in each match. Use it to inspect
   matches."
   [fsm-pair]
-  (drop 1 (-> (fn [[payoff-seq fsm-pair]]
-                [(match->payoffs fsm-pair)
-                 (transit-automata fsm-pair)])
-              (iterate [[] fsm-pair]))))
+  (drop 1 (-> (fn [{:keys [payoff-pair fsm-pair]}]
+                {:payoff-pair (match->payoffs fsm-pair)
+                 :fsm-pair (transit-automata fsm-pair)})
+              (iterate {:payoff-pair []
+                        :fsm-pair fsm-pair}))))
 
 (defn match-results
   "Runs an automaton pair through a finte number of matches. Returns
