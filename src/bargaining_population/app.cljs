@@ -17,7 +17,10 @@
                    :discount-rate 0.5
                    :reproduction-size 5}))
 
-(def population-cycles (atom []))
+(def ^{:doc "`population-cycles`'s length is always one more other
+cycles'. The last cycle is the one that will be fed to the next
+`run-cycle`."}
+  population-cycles (atom []))
 
 (def payoff-cycles (atom []))
 
