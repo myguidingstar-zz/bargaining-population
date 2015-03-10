@@ -22,8 +22,8 @@
    :low :high})
 
 (defn transit-fsm
-  [{:keys [accommodator? strategy] :as fsm} opponent-state]
-  (if accommodator?
+  [{:keys [accommodator strategy] :as fsm} opponent-state]
+  (if accommodator
     (assoc fsm :strategy (accommodator-transit opponent-state))
     fsm))
 
