@@ -194,20 +194,19 @@ cycles'. The last cycle is the one that will be fed to the next
     [:.ui.red.button {:on-click stop}
      "Stop"]))
 
-(rum/defc column < rum/reactive [i payoff-mean]
-  (let [mps (rum/react max-payoff-mean)]
-    (when (< 0 mps)
-      [:div.column {:key i
-                    :style {:background-color
-                            (if (= i (rum/react selected-cyle))
-                              "yellow" "#eee")}
-                    :on-click #(reset! selected-cyle i)}
-       [:div.item
-        {:style {:background-color
-                 (if (= i (rum/react selected-cyle))
-                   "red" "#369")
-                 :height (str (* 100 (/ payoff-mean mps))
-                              "%")}}]])))
+(rum/defc column < rum/static
+  [i payoff-mean mpm selected]
+  [:div.column {:key i
+                :style {:background-color
+                        (if (= i selected)
+                          "yellow" "#eee")}
+                :on-click #(reset! selected-cyle i)}
+   [:div.item
+    {:style {:background-color
+             (if (= i selected)
+               "red" "#369")
+             :height (str (* 100 (/ payoff-mean mpm))
+                          "%")}}]])
 
 (rum/defc chart < rum/reactive []
   [:div.chart {:style {:height (str "300px")}}
