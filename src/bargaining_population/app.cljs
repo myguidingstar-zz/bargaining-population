@@ -179,15 +179,13 @@ cycles'. The last cycle is the one that will be fed to the next
       {:on-click init!}
       "Run"]]))
 
-(rum/defc pause-resume < rum/reactive []
+(rum/defc pause-and-resume-buttons < rum/reactive []
   (case (rum/react status)
     :running
-    [:.ui.yellow.button {:on-click #(do (reset! status :paused) nil)}
+    [:.ui.yellow.button {:on-click pause}
      "Pause"]
     :paused
-    [:.ui.teal.button {:on-click #(do (reset! status :running)
-                                      (next-cycle!)
-                                      nil)}
+    [:.ui.teal.button {:on-click resume}
      "Resume"]
     nil))
 
