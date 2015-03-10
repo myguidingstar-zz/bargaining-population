@@ -189,15 +189,9 @@ cycles'. The last cycle is the one that will be fed to the next
      "Resume"]
     nil))
 
-(rum/defc stop < rum/reactive []
+(rum/defc stop-button < rum/reactive []
   (when-not (= :stopped (rum/react status))
-    [:.ui.red.button {:on-click #(do (reset! status :stopped)
-                                     (reset! population-cycles [])
-                                     (reset! payoff-cycles [])
-                                     (reset! payoff-mean-cycles [])
-                                     (reset! max-payoff-mean 0)
-                                     (reset! selected-cyle 0)
-                                     nil)}
+    [:.ui.red.button {:on-click stop}
      "Stop"]))
 
 (rum/defc column < rum/reactive [i payoff-mean]
