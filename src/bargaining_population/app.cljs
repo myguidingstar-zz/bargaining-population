@@ -210,9 +210,12 @@ cycles'. The last cycle is the one that will be fed to the next
 
 (rum/defc chart < rum/reactive []
   [:div.chart {:style {:height (str "300px")}}
-   (let [the-cycles (rum/react payoff-mean-cycles)]
-     (for [i (range (count the-cycles))]
-       (column i (nth the-cycles i))))])
+   (let [the-cycles (rum/react payoff-mean-cycles)
+         mpm (rum/react max-payoff-mean)
+         selected (rum/react selected-cyle)]
+     (when (< 0 mpm)
+       (for [i (range (count the-cycles))]
+         (column i (nth the-cycles i) mpm selected))))])
 
 (rum/defc inspector < rum/reactive []
   (when (< 0 (count (rum/react payoff-cycles)))
