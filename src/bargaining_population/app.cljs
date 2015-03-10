@@ -169,17 +169,14 @@ cycles'. The last cycle is the one that will be fed to the next
                :on-change #(do (swap! config assoc :discount-rate
                                       (-> % .-target .-value js/parseFloat)) nil)}]])])
 
-(rum/defc run < rum/reactive []
+(rum/defc run-button < rum/reactive []
   (when (= :stopped (rum/react status))
     [:div
      (init-population)
      (config-cycle)
      (config-cycle-aggregator)
      [:.ui.green.button
-      {:on-click #(do (reset! status :running)
-                      (init!)
-                      (forever!)
-                      nil)}
+      {:on-click init!}
       "Run"]]))
 
 (rum/defc pause-resume < rum/reactive []
