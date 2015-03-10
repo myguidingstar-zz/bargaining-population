@@ -29,7 +29,7 @@ cycles'. The last cycle is the one that will be fed to the next
 
 (def payoff-mean-cycles (atom []))
 
-(def max-payoff-mean (atom 0))
+(def max-payoff-mean 8)
 
 (def selected-cyle (atom 0))
 
@@ -82,7 +82,6 @@ cycles'. The last cycle is the one that will be fed to the next
   (let [payoff-mean (mean payoffs)]
     (swap! payoff-cycles #(conj % payoffs))
     (swap! payoff-mean-cycles #(conj % payoff-mean))
-    (swap! max-payoff-mean #(max % payoff-mean))
     (swap! population-cycles #(conj % population-after))))
 
 (defn start-worker [initial-population]
@@ -115,7 +114,6 @@ cycles'. The last cycle is the one that will be fed to the next
   (reset! population-cycles [])
   (reset! payoff-cycles [])
   (reset! payoff-mean-cycles [])
-  (reset! max-payoff-mean 0)
   (reset! selected-cyle 0)
   nil)
 
@@ -195,7 +193,7 @@ cycles'. The last cycle is the one that will be fed to the next
      "Stop"]))
 
 (rum/defc column < rum/static
-  [i payoff-mean mpm selected]
+  [i payoff-mean selected]
   [:div.column {:key i
                 :style {:background-color
                         (if (= i selected)
@@ -205,17 +203,16 @@ cycles'. The last cycle is the one that will be fed to the next
     {:style {:background-color
              (if (= i selected)
                "red" "#369")
-             :height (str (* 100 (/ payoff-mean mpm))
+             :height (str (* 100 (/ payoff-mean max-payoff-mean))
                           "%")}}]])
 
 (rum/defc chart < rum/reactive []
   [:div.chart {:style {:height (str "300px")}}
    (let [the-cycles (rum/react payoff-mean-cycles)
-         mpm (rum/react max-payoff-mean)
          selected (rum/react selected-cyle)]
-     (when (< 0 mpm)
+     (when-not (= :stopped (rum/react status))
        (for [i (range (count the-cycles))]
-         (column i (nth the-cycles i) mpm selected))))])
+         (column i (nth the-cycles i) selected))))])
 
 (rum/defc inspector < rum/reactive []
   (when (< 0 (count (rum/react payoff-cycles)))
