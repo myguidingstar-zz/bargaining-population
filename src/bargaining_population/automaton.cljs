@@ -16,6 +16,12 @@
     :accommodator
     strategy))
 
+(defn reset-accommodator
+  [{:keys [strategy accommodator] :as fsm}]
+  (if accommodator
+    (initial-automaton :accommodator)
+    fsm))
+
 (def accommodator-transit
   {:high :low
    :medium :medium
