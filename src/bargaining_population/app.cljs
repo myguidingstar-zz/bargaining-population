@@ -67,7 +67,7 @@ cycles'. The last cycle is the one that will be fed to the next
 (defn population-size [init]
   (apply + (vals init)))
 
-(def computation-output-channel (chan))
+(def computation-output-channel (chan 100))
 
 ;; ui-update-queue's content is exactly the same as that of
 ;; computation-output-channel but with a mixer in the middle so be
