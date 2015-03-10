@@ -85,6 +85,16 @@ cycles'. The last cycle is the one that will be fed to the next
     (swap! max-payoff-mean #(max % payoff-mean))
     (swap! population-cycles #(conj % population-after))))
 
+(defn start-worker [initial-population]
+  (go (loop [population initial-population]
+        (<! (timeout 1))
+        (let [{:keys [population] :as data} ((run-cycle @config) population)]
+          (>! computation-output-channel data)
+          (recur population))))
+  (go (loop []
+        (let [{:keys [population payoffs]} (<! ui-update-queue)]
+          (update-cycles! payoffs population))
+        (recur))))
 (defn init! []
   (let [population (initialize-population @init)
         {population-after :population :keys [payoffs]}
