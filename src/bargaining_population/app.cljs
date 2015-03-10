@@ -235,9 +235,9 @@ cycles'. The last cycle is the one that will be fed to the next
 
 (rum/defc launch-board < rum/reactive []
   [:div
-   (run)
-   (pause-resume)
-   (stop)
+   (run-button)
+   (pause-and-resume-buttons)
+   (stop-button)
    (chart)
    (inspector)])
 
