@@ -1,9 +1,12 @@
 (ns bargaining-population.app
+  (:require-macros [cljs.core.async.macros :refer [go]])
   (:require [rum :include-macros true]
             [bargaining-population.automaton :refer
              [initial-automaton automaton-name]]
             [bargaining-population.cycle :refer [run-cycle]]
-            [bargaining-population.match :refer [mean]]))
+            [bargaining-population.match :refer [mean]]
+            [cljs.core.async
+             :refer [mix admix toggle chan <! >! timeout]]))
 
 (def status (atom :stopped))
 
