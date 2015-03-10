@@ -120,22 +120,11 @@ cycles'. The last cycle is the one that will be fed to the next
   nil)
 
 (defn init! []
-  (let [population (initialize-population @init)
-        {population-after :population :keys [payoffs]}
-        ((run-cycle @config) population)]
-    (swap! population-cycles #(conj % population-after))
-    (update-cycles! payoffs population-after)))
-
-(defn next-cycle! []
-  (let [{:keys [population payoffs]}
-        ((run-cycle @config) (last @population-cycles))]
-    (update-cycles! payoffs population)))
-
-(defn forever! []
-  (js/setTimeout #(do (when (= :running @status)
-                        (next-cycle!))
-                      (forever!))
-                 100))
+  (let [population (initialize-population @init)]
+    (swap! population-cycles #(conj % population))
+    (start-worker population)
+    (resume)
+    nil))
 
 (rum/defc config-cycle < rum/reactive []
   [:.ui.labeled.input
