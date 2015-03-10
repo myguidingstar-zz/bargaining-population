@@ -107,6 +107,18 @@ cycles'. The last cycle is the one that will be fed to the next
   (toggle mixer {computation-output-channel {:mute false
                                              :pause false}})
   nil)
+
+(defn stop []
+  (reset! status :stopped)
+  (toggle mixer {computation-output-channel {:mute true
+                                             :pause false}})
+  (reset! population-cycles [])
+  (reset! payoff-cycles [])
+  (reset! payoff-mean-cycles [])
+  (reset! max-payoff-mean 0)
+  (reset! selected-cyle 0)
+  nil)
+
 (defn init! []
   (let [population (initialize-population @init)
         {population-after :population :keys [payoffs]}
