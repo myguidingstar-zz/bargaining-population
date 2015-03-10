@@ -67,6 +67,15 @@ cycles'. The last cycle is the one that will be fed to the next
 (defn population-size [init]
   (apply + (vals init)))
 
+(def computation-output-channel (chan))
+
+;; ui-update-queue's content is exactly the same as that of
+;; computation-output-channel but with a mixer in the middle so be
+;; data flowing from computation-output-channel can be paused on the
+;; fly
+(def ui-update-queue (chan))
+(def mixer (mix ui-update-queue))
+
 (defn update-cycles!
   "Appends run-cycle results to relevant atoms."
   [payoffs population-after]
