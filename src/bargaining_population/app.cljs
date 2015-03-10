@@ -95,6 +95,18 @@ cycles'. The last cycle is the one that will be fed to the next
         (let [{:keys [population payoffs]} (<! ui-update-queue)]
           (update-cycles! payoffs population))
         (recur))))
+
+(defn pause []
+  (reset! status :paused)
+  (toggle mixer {computation-output-channel {:mute false
+                                             :pause true}})
+  nil)
+
+(defn resume []
+  (reset! status :running)
+  (toggle mixer {computation-output-channel {:mute false
+                                             :pause false}})
+  nil)
 (defn init! []
   (let [population (initialize-population @init)
         {population-after :population :keys [payoffs]}
