@@ -2,17 +2,17 @@
 
 (def initial-automaton
   {:high         {:strategy :high
-                  :accommodator? false}
+                  :accommodator false}
    :medium       {:strategy :medium
-                  :accommodator? false}
+                  :accommodator false}
    :low          {:strategy :low
-                  :accommodator? false}
+                  :accommodator false}
    :accommodator {:strategy :medium
-                  :accommodator? true}})
+                  :accommodator true}})
 
 (defn automaton-name
-  [{:keys [strategy accommodator?]}]
-  (if accommodator?
+  [{:keys [strategy accommodator]}]
+  (if accommodator
     :accommodator
     strategy))
 
