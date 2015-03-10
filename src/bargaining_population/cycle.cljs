@@ -1,7 +1,7 @@
 (ns bargaining-population.cycle
   (:require-macros [lonocloud.synthread :as ->])
   (:require [bargaining-population.automaton
-             :refer [initial-automaton random-true-by-probability
+             :refer [initial-automaton random-true-by-probability reset-accommodator
                      randomize-by-frequency-map aggregate-payoff-by-type]]
             [bargaining-population.match
              :refer [match-results mean present-value-sum]]))
@@ -14,7 +14,7 @@
                      (partition 2 population))
         new-population (mapcat :automaton-pair results)
         payoff-seqs (mapcat :payoff-seq-pair results)]
-    {:population new-population
+    {:population (map reset-accommodator new-population)
      :payoffs (map payoff-aggregator payoff-seqs)}))
 
 (defn reproduction-phase
