@@ -333,7 +333,8 @@ cycles'. The last cycle is the one that will be fed to the next
    (pause-and-resume-buttons)
    (stop-button)
    (chart)
-   (inspector)])
+   (inspector)
+   (population-type-rate-chart)])
 
 (let [app-root (.getElementById js/document "my-app")]
   (rum/mount (launch-board) app-root))
