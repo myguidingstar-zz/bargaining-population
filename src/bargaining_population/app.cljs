@@ -40,8 +40,8 @@ cycles'. The last cycle is the one that will be fed to the next
 (def selected-cyle (atom 0))
 
 (def projected-types (atom {:high true
-                            :medium true
-                            :low false
+                            :medium false
+                            :low true
                             :accommodator false}))
 
 (defn previous-selection! []
