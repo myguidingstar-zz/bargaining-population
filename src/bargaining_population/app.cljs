@@ -225,11 +225,9 @@ cycles'. The last cycle is the one that will be fed to the next
 
 (rum/defc circle < rum/static [key x y position selected]
   [:circle {:key key
-            :style {:stroke "steelblue"
-                    :stroke-width 1
-                    :fill (if (= position selected)
+            :style {:fill (if (= position selected)
                             "red"
-                            "white")}
+                            "green")}
             :on-click #(do (reset! selected-cyle position) nil)
             :cx x
             :cy y
@@ -238,7 +236,7 @@ cycles'. The last cycle is the one that will be fed to the next
 
 (rum/defc line < rum/static [key x1 y1 x2 y2]
   [:line {:key key
-          :style {:stroke "steelblue"   ;(inline "rgb" 255 0 0)
+          :style {:stroke "steelblue"
                   :stroke-width 1}
           :x1 x1
           :y1 y1
@@ -258,7 +256,8 @@ cycles'. The last cycle is the one that will be fed to the next
 
 (rum/defc chart < rum/reactive []
   [:div {:style {:overflow "scroll"}}
-   [:svg {:height 300
+   [:svg {:style {:background-color "#eee"}
+          :height 300
           :width 5000}
     (let [the-cycles (rum/react payoff-mean-cycles)
           selected (rum/react selected-cyle)]
