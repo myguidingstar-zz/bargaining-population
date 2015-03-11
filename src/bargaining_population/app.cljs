@@ -192,6 +192,19 @@ cycles'. The last cycle is the one that will be fed to the next
     [:.ui.red.button {:on-click stop}
      "Stop"]))
 
+(rum/defc circle < rum/static [key x y position selected]
+  [:circle {:key key
+            :style {:stroke "steelblue"
+                    :stroke-width 1
+                    :fill (if (= position selected)
+                            "red"
+                            "white")}
+            :on-click #(do (reset! selected-cyle position) nil)
+            :cx x
+            :cy y
+            :cz 10
+            :r 2}])
+
 (rum/defc column < rum/static
   [i payoff-mean selected]
   [:div.column {:key i
