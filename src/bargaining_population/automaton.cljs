@@ -89,3 +89,14 @@
                       (vector k)
                       (conj acc)))
                {})))
+
+(defn aggregate-type-rate [population]
+  (let [n (count population)]
+    (reduce (fn [acc au]
+              (let [t (automaton-name au)]
+                (update-in acc [t] #(+ % (/ 1 n)))))
+            {:high         0
+             :medium       0
+             :low          0
+             :accommodator 0}
+            population)))
