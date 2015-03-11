@@ -93,7 +93,7 @@ cycles'. The last cycle is the one that will be fed to the next
   (let [payoff-mean (mean payoffs)]
     (swap! payoff-cycles #(conj % payoffs))
     (swap! payoff-mean-cycles #(conj % payoff-mean))
-    (swap! population-cycles #(conj % population-after))))
+    (append-population-cycles! population-after)))
 
 (defn start-worker [initial-population]
   (go (loop [population initial-population]
@@ -123,6 +123,7 @@ cycles'. The last cycle is the one that will be fed to the next
   (toggle mixer {computation-output-channel {:mute true
                                              :pause false}})
   (reset! population-cycles [])
+  (reset! population-type-rate-cycles [])
   (reset! payoff-cycles [])
   (reset! payoff-mean-cycles [])
   (reset! selected-cyle 0)
@@ -130,7 +131,7 @@ cycles'. The last cycle is the one that will be fed to the next
 
 (defn init! []
   (let [population (initialize-population @init)]
-    (swap! population-cycles #(conj % population))
+    (append-population-cycles! population)
     (start-worker population)
     (resume)
     nil))
