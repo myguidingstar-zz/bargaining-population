@@ -225,27 +225,21 @@ cycles'. The last cycle is the one that will be fed to the next
   (-> #(vector (* x-step (inc %1)) (- height (* height %2)))
       (map-indexed ys)))
 
-(rum/defc column < rum/static
-  [i payoff-mean selected]
-  [:div.column {:key i
-                :style {:background-color
-                        (if (= i selected)
-                          "yellow" "#eee")}
-                :on-click #(reset! selected-cyle i)}
-   [:div.item
-    {:style {:background-color
-             (if (= i selected)
-               "red" "#369")
-             :height (str (* 100 (/ payoff-mean max-payoff-mean))
-                          "%")}}]])
-
 (rum/defc chart < rum/reactive []
-  [:div.chart {:style {:height (str "300px")}}
-   (let [the-cycles (rum/react payoff-mean-cycles)
-         selected (rum/react selected-cyle)]
-     (when-not (= :stopped (rum/react status))
-       (for [i (range (count the-cycles))]
-         (column i (nth the-cycles i) selected))))])
+  [:div {:style {:overflow "scroll"}}
+   [:svg {:height 300
+          :width 5000}
+    (let [the-cycles (rum/react payoff-mean-cycles)
+          selected (rum/react selected-cyle)]
+      (when-not (= :stopped (rum/react status))
+        (->> (map #(/ % 8) the-cycles)
+             (list->points 3 300)
+             (partition-all 2 1)
+             (map-indexed (fn [i [[x1 y1] [x2 y2]]]
+                            [(circle (* 2 i) x1 y1
+                                     i selected)
+                             (when x2 (line (inc (* 2 i)) x1 y1 x2 y2))]))
+             (apply concat))))]])
 
 (rum/defc inspector < rum/reactive []
   (when (< 0 (count (rum/react payoff-cycles)))
