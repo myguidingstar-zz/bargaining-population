@@ -272,6 +272,11 @@ cycles'. The last cycle is the one that will be fed to the next
                              (when x2 (line (inc (* 2 i)) x1 y1 x2 y2))]))
              (apply concat))))]])
 
+(defn true-keys
+  "Finds keys in a hash-map where associated value is `true`."
+  [m]
+  (reduce-kv (fn [l k v] (if v (conj l k) l)) [] m))
+
 (rum/defc inspector < rum/reactive []
   (when (< 0 (count (rum/react payoff-cycles)))
     [:div
