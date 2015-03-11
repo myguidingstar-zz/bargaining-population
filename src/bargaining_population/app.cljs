@@ -33,6 +33,11 @@ cycles'. The last cycle is the one that will be fed to the next
 
 (def selected-cyle (atom 0))
 
+(def projected-types (atom {:high true
+                            :medium true
+                            :low false
+                            :accommodator false}))
+
 (defn previous-selection! []
   (when (< 0 @selected-cyle)
     (swap! selected-cyle dec)))
@@ -167,12 +172,31 @@ cycles'. The last cycle is the one that will be fed to the next
                :on-change #(do (swap! config assoc :discount-rate
                                       (-> % .-target .-value js/parseFloat)) nil)}]])])
 
+(rum/defc select-projected-types < rum/reactive []
+  [:.ui.form
+   [:.grouped.inline.fields
+    [:.ui.label "Projected types (must be 2)"]
+    [:.field
+     (let [projected? (rum/react projected-types)]
+       (map-indexed
+        (fn [i the-type]
+          [:.ui.checkbox
+           {:key i
+            :on-click
+            #(do (swap! projected-types update-in [the-type] not)
+                 nil)}
+           [:input {:type "checkbox"
+                    :checked (projected? the-type)}]
+           [:label (name the-type)]])
+        [:high :medium :low :accommodator]))]]])
+
 (rum/defc run-button < rum/reactive []
   (when (= :stopped (rum/react status))
     [:div
      (init-population)
      (config-cycle)
      (config-cycle-aggregator)
+     (select-projected-types)
      [:.ui.green.button
       {:on-click init!}
       "Run"]]))
