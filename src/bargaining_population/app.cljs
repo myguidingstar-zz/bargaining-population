@@ -205,6 +205,15 @@ cycles'. The last cycle is the one that will be fed to the next
             :cz 10
             :r 2}])
 
+(rum/defc line < rum/static [key x1 y1 x2 y2]
+  [:line {:key key
+          :style {:stroke "steelblue"   ;(inline "rgb" 255 0 0)
+                  :stroke-width 1}
+          :x1 x1
+          :y1 y1
+          :x2 x2
+          :y2 y2}])
+
 (rum/defc column < rum/static
   [i payoff-mean selected]
   [:div.column {:key i
