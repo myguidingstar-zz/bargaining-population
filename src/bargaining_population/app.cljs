@@ -277,6 +277,18 @@ cycles'. The last cycle is the one that will be fed to the next
   [m]
   (reduce-kv (fn [l k v] (if v (conj l k) l)) [] m))
 
+(defn rates->points
+  "Generates a list of points that can be fed to population-type-rate-chart.
+
+  Arguments:
+
+  - size: the height/width of the chart.
+
+  - rates: list of [x, y] values, each of which is between 0 and 1."
+  [size rates]
+  (-> (fn [[x y]] (vector (* size x) (- size (* size y))))
+      (map rates)))
+
 (rum/defc inspector < rum/reactive []
   (when (< 0 (count (rum/react payoff-cycles)))
     [:div
