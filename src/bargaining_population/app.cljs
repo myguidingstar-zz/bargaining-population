@@ -288,6 +288,22 @@ cycles'. The last cycle is the one that will be fed to the next
   (-> (fn [[x y]] (vector (* size x) (- size (* size y))))
       (map rates)))
 
+(rum/defc axes < rum/static
+  [[x-name y-name]]
+  [:g
+   (line 1 0 0 0 300)
+   (line 2 0 300 300 300)
+   [:text {:key 3
+           :x 10
+           :y 10
+           :font-size 11}
+    x-name]
+   [:text {:key 4
+           :x 260
+           :y 290
+           :font-size 11}
+    y-name]])
+
 (rum/defc population-type-rate-chart < rum/reactive []
   [:div {:style {:overflow "scroll"}}
    [:svg {:style {:background-color "#eee"}
