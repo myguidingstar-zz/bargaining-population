@@ -321,7 +321,7 @@ cycles'. The last cycle is the one that will be fed to the next
                               [(circle (* 2 i) x1 y1
                                        i selected)
                                (when x2 (line (inc (* 2 i)) x1 y1 x2 y2))]))
-               (apply concat))
+               (apply concat [(axes (map name the-types))]))
           [:text {:x 10
                   :y 140
                   :font-size 12}
