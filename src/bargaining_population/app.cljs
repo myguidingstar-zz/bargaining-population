@@ -313,22 +313,19 @@ cycles'. The last cycle is the one that will be fed to the next
            "There must be exactly 2 projected types."])))]])
 
 (rum/defc inspector < rum/reactive []
-  (when (< 0 (count (rum/react payoff-cycles)))
-    [:div
-     [:div (str "Payoffs: "
-                (nth (rum/react payoff-cycles)
-                     (rum/react selected-cyle)))]
-     [:div (str "Payoff mean: "
-                (nth (rum/react payoff-mean-cycles)
-                     (rum/react selected-cyle)))]
-     [:div (str "Population: ")
-      (let [automata (nth (rum/react population-cycles)
-                          (rum/react selected-cyle))]
-        [:div
-         (str (reduce (fn [acc fsm]
-                        (update-in acc [(automaton-name fsm)] inc))
-                      {}
-                      automata))])]]))
+  (let [the-cycles (rum/react payoff-cycles)
+        selected   (rum/react selected-cyle)]
+    (when (< 0 (count the-cycles))
+      [:div
+       [:div (str "Selected: " selected)]
+       [:div (str "Payoffs: "
+                  (nth the-cycles selected))]
+       [:div (str "Payoff mean: "
+                  (nth (rum/react payoff-mean-cycles) selected))]
+       [:div (str "Population: ")
+        (let [automata (nth (rum/react population-cycles) selected)]
+          [:div
+           (str (aggregate-type-rate automata))])]])))
 
 (rum/defc launch-board < rum/reactive []
   [:div
