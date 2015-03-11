@@ -2,7 +2,7 @@
   (:require-macros [cljs.core.async.macros :refer [go]])
   (:require [rum :include-macros true]
             [bargaining-population.automaton :refer
-             [initial-automaton automaton-name]]
+             [initial-automaton automaton-name aggregate-type-rate]]
             [bargaining-population.cycle :refer [run-cycle]]
             [bargaining-population.match :refer [mean]]
             [cljs.core.async
@@ -24,6 +24,12 @@
 cycles'. The last cycle is the one that will be fed to the next
 `run-cycle`."}
   population-cycles (atom []))
+
+(def population-type-rate-cycles (atom []))
+
+(defn append-population-cycles! [population]
+  (swap! population-cycles #(conj % population))
+  (swap! population-type-rate-cycles #(conj % (aggregate-type-rate population))))
 
 (def payoff-cycles (atom []))
 
