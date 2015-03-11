@@ -289,6 +289,29 @@ cycles'. The last cycle is the one that will be fed to the next
   (-> (fn [[x y]] (vector (* size x) (- size (* size y))))
       (map rates)))
 
+(rum/defc population-type-rate-chart < rum/reactive []
+  [:div {:style {:overflow "scroll"}}
+   [:svg {:style {:background-color "#eee"}
+          :height 300
+          :width 300}
+    (let [the-cycles (rum/react population-type-rate-cycles)
+          the-types (true-keys (rum/react projected-types))
+          selected (rum/react selected-cyle)]
+      (when-not (= :stopped (rum/react status))
+        (if (= 2 (count the-types))
+          (->> (map #(map % the-types) the-cycles)
+               (rates->points 300)
+               (partition-all 2 1)
+               (map-indexed (fn [i [[x1 y1] [x2 y2]]]
+                              [(circle (* 2 i) x1 y1
+                                       i selected)
+                               (when x2 (line (inc (* 2 i)) x1 y1 x2 y2))]))
+               (apply concat))
+          [:text {:x 10
+                  :y 140
+                  :font-size 12}
+           "There must be exactly 2 projected types."])))]])
+
 (rum/defc inspector < rum/reactive []
   (when (< 0 (count (rum/react payoff-cycles)))
     [:div
