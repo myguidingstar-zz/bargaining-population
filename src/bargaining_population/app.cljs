@@ -142,11 +142,9 @@ cycles'. The last cycle is the one that will be fed to the next
           (clear-data!)))))
 
 (defn init! []
-  (let [population (initialize-population @init)]
-    (append-population-cycles! population)
-    (start-worker population)
-    (resume)
-    nil))
+  (resume)
+  (start-worker)
+  nil)
 
 (rum/defc config-cycle < rum/reactive []
   [:.ui.labeled.input
