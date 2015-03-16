@@ -109,6 +109,12 @@ cycles'. The last cycle is the one that will be fed to the next
         (let [{:keys [population payoffs]} (<! ui-update-queue)]
           (update-cycles! payoffs population))
         (recur))))
+(defn clear-data! []
+ (reset! population-cycles [])
+ (reset! population-type-rate-cycles [])
+ (reset! payoff-cycles [])
+ (reset! payoff-mean-cycles [])
+ (reset! selected-cyle 0))
 
 (defn pause []
   (reset! status :paused)
@@ -126,11 +132,6 @@ cycles'. The last cycle is the one that will be fed to the next
   (reset! status :stopped)
   (toggle mixer {computation-output-channel {:mute true
                                              :pause false}})
-  (reset! population-cycles [])
-  (reset! population-type-rate-cycles [])
-  (reset! payoff-cycles [])
-  (reset! payoff-mean-cycles [])
-  (reset! selected-cyle 0)
   nil)
 
 (defn init! []
