@@ -120,8 +120,8 @@ cycles'. The last cycle is the one that will be fed to the next
 
 (defn stop []
   (reset! status :stopped)
-  (toggle mixer {computation-output-channel {:mute true
-                                             :pause false}})
+  (go (<! computation-input-channel)
+      (>! computation-input-channel false))
   nil)
 
 (defn start-worker []
