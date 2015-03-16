@@ -127,7 +127,10 @@ cycles'. The last cycle is the one that will be fed to the next
   nil)
 
 (defn start-worker []
-  (go (>! computation-input-channel (initialize-population @init)))
+  (go (let [population (initialize-population @init)]
+        (clear-data!)
+        (append-population-cycles! population)
+        (>! computation-input-channel population)))
   (go (loop []
         (if-let [population (<! computation-input-channel)]
           (let [{new-population :population :as data} ((run-cycle @config) population)]
@@ -136,12 +139,10 @@ cycles'. The last cycle is the one that will be fed to the next
           (>! computation-output-channel false))))
   (go (loop []
         (<! (timeout 1))
-        (if-let [{:keys [population payoffs]} (<! ui-update-queue)]
-          (do
-            (update-cycles! payoffs population)
-            (>! computation-input-channel population)
-            (recur))
-          (clear-data!)))))
+        (when-let [{:keys [population payoffs]} (<! ui-update-queue)]
+          (update-cycles! payoffs population)
+          (>! computation-input-channel population)
+          (recur)))))
 
 (defn init! []
   (resume)
