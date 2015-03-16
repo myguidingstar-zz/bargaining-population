@@ -99,16 +99,6 @@ cycles'. The last cycle is the one that will be fed to the next
     (swap! payoff-mean-cycles #(conj % payoff-mean))
     (append-population-cycles! population-after)))
 
-(defn start-worker [initial-population]
-  (go (loop [population initial-population]
-        (<! (timeout 1))
-        (let [{:keys [population] :as data} ((run-cycle @config) population)]
-          (>! computation-output-channel data)
-          (recur population))))
-  (go (loop []
-        (let [{:keys [population payoffs]} (<! ui-update-queue)]
-          (update-cycles! payoffs population))
-        (recur))))
 (defn clear-data! []
  (reset! population-cycles [])
  (reset! population-type-rate-cycles [])
@@ -133,6 +123,23 @@ cycles'. The last cycle is the one that will be fed to the next
   (toggle mixer {computation-output-channel {:mute true
                                              :pause false}})
   nil)
+
+(defn start-worker []
+  (go (>! computation-input-channel (initialize-population @init)))
+  (go (loop []
+        (if-let [population (<! computation-input-channel)]
+          (let [{new-population :population :as data} ((run-cycle @config) population)]
+            (>! computation-output-channel data)
+            (recur))
+          (>! computation-output-channel false))))
+  (go (loop []
+        (<! (timeout 1))
+        (if-let [{:keys [population payoffs]} (<! ui-update-queue)]
+          (do
+            (update-cycles! payoffs population)
+            (>! computation-input-channel population)
+            (recur))
+          (clear-data!)))))
 
 (defn init! []
   (let [population (initialize-population @init)]
