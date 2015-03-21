@@ -248,13 +248,12 @@ cycles'. The last cycle is the one that will be fed to the next
           :x2 x2
           :y2 y2}])
 
-(rum/defc chart < rum/reactive []
+(rum/defc selectable-chart < rum/reactive [the-cycles]
   [:div {:style {:overflow "scroll"}}
    [:svg {:style {:background-color "#eee"}
           :height 300
           :width 5000}
-    (let [the-cycles (rum/react payoff-mean-cycles)
-          selected (rum/react selected-cyle)]
+    (let [selected (rum/react selected-cyle)]
       (when-not (= :stopped (rum/react status))
         (->> (map #(/ % 8) the-cycles)
              (list->points 3 300)
@@ -265,11 +264,6 @@ cycles'. The last cycle is the one that will be fed to the next
                              (when x2 (line (inc (* 2 i)) x1 y1 x2 y2))]))
              (apply concat))))]])
 
-
-  - rates: list of [x, y] values, each of which is between 0 and 1."
-  [size rates]
-  (-> (fn [[x y]] (vector (* size x) (- size (* size y))))
-      (map rates)))
 (defn ->autorefresh-mixin
   "Creates a Rum mixin that automatically refreshes after every period
   of `time`."
@@ -284,6 +278,8 @@ cycles'. The last cycle is the one that will be fed to the next
    :will-unmount (fn [state]
                    (js/clearInterval (::interval state)))})
 
+(rum/defc chart < (->autorefresh-mixin 200) []
+  (selectable-chart @payoff-mean-cycles))
 
 (rum/defc axes < rum/static
   [[x-name y-name]]
