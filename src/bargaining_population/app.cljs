@@ -270,6 +270,20 @@ cycles'. The last cycle is the one that will be fed to the next
   [size rates]
   (-> (fn [[x y]] (vector (* size x) (- size (* size y))))
       (map rates)))
+(defn ->autorefresh-mixin
+  "Creates a Rum mixin that automatically refreshes after every period
+  of `time`."
+  [time]
+  {:did-mount (fn [state]
+                (let [comp      (:rum/react-component state)
+                      callback #(rum/request-render comp)
+                      interval  (js/setInterval callback time)]
+                  (assoc state ::interval interval)))
+   :transfer-state (fn [old-state state]
+                     (merge state (select-keys old-state [::interval])))
+   :will-unmount (fn [state]
+                   (js/clearInterval (::interval state)))})
+
 
 (rum/defc axes < rum/static
   [[x-name y-name]]
