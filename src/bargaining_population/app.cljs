@@ -1,8 +1,10 @@
 (ns bargaining-population.app
   (:require-macros [cljs.core.async.macros :refer [go]])
   (:require [rum :include-macros true]
+            [bargaining-population.utils :refer
+             [initialize-population population-size list->points true-keys rates->points]]
             [bargaining-population.automaton :refer
-             [initial-automaton automaton-name aggregate-type-rate]]
+             [automaton-name aggregate-type-rate]]
             [bargaining-population.cycle :refer [run-cycle]]
             [bargaining-population.match :refer [mean]]
             [cljs.core.async
@@ -69,14 +71,6 @@ cycles'. The last cycle is the one that will be fed to the next
                    :on-change #(do (swap! init assoc type
                                           (-> % .-target .-value js/parseInt)) nil)}]])
        (mapcat [:high :medium :low :accommodator]))])
-
-(defn initialize-population [init]
-  (-> (fn [[k v]] (repeat v (initial-automaton k)))
-      (mapcat init)
-      shuffle))
-
-(defn population-size [init]
-  (apply + (vals init)))
 
 ;; contains initial population or previous step data to feed to main
 ;; computation loop.
@@ -256,17 +250,6 @@ cycles'. The last cycle is the one that will be fed to the next
           :x2 x2
           :y2 y2}])
 
-(defn list->points
-  "Generates a list of points that can be fed to chart.
-  Arguments:
-
-    - x-step: constant distance between two adjacent points' x values.
-    - height: the height of the chart.
-    - ys: list of main values, each of which is between 0 and 1."
-  [x-step height ys]
-  (-> #(vector (* x-step (inc %1)) (- height (* height %2)))
-      (map-indexed ys)))
-
 (rum/defc chart < rum/reactive []
   [:div {:style {:overflow "scroll"}}
    [:svg {:style {:background-color "#eee"}
@@ -284,17 +267,6 @@ cycles'. The last cycle is the one that will be fed to the next
                              (when x2 (line (inc (* 2 i)) x1 y1 x2 y2))]))
              (apply concat))))]])
 
-(defn true-keys
-  "Finds keys in a hash-map where associated value is `true`."
-  [m]
-  (reduce-kv (fn [l k v] (if v (conj l k) l)) [] m))
-
-(defn rates->points
-  "Generates a list of points that can be fed to population-type-rate-chart.
-
-  Arguments:
-
-  - size: the height/width of the chart.
 
   - rates: list of [x, y] values, each of which is between 0 and 1."
   [size rates]
