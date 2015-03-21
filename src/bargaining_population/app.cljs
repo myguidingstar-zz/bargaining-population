@@ -60,8 +60,6 @@ cycles'. The last cycle is the one that will be fed to the next
     39 (next-selection!)
     nil))
 
-(.addEventListener js/window "keydown" keyboard-navigate)
-
 (rum/defc init-population < rum/reactive []
   [:.ui.labeled.input
    (-> (fn [type]
@@ -336,5 +334,7 @@ cycles'. The last cycle is the one that will be fed to the next
    (inspector)
    (population-type-rate-chart)])
 
-(let [app-root (.getElementById js/document "my-app")]
-  (rum/mount (launch-board) app-root))
+(defn main []
+  (.addEventListener js/window "keydown" keyboard-navigate)
+  (let [app-root (.getElementById js/document "my-app")]
+    (rum/mount (launch-board) app-root)))
