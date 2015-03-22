@@ -254,11 +254,12 @@ cycles'. The last cycle is the one that will be fed to the next
    [:svg {:style {:background-color "#eee"}
           :height 300
           :width 5000}
-    (let [selected (rum/react selected-cyle)]
-      (when-not (= :stopped (rum/react status))
-        (->> (map #(/ % 8) the-cycles)
-             (list->points 3 300)
-             (partition-all 2 1)
+    (when-not (= :stopped (rum/react status))
+      (let [selected (rum/react selected-cyle)
+            point-pairs (->> (map #(/ % 8) the-cycles)
+                             (list->points 3 300)
+                             (partition-all 2 1))]
+        (->> point-pairs
              (map-indexed (fn [i [[x1 y1] [x2 y2]]]
                             [(circle (* 2 i) x1 y1
                                      i selected)
