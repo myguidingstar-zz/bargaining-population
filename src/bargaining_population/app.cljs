@@ -62,13 +62,14 @@ cycles'. The last cycle is the one that will be fed to the next
 
 (rum/defc init-population < rum/reactive []
   [:.ui.labeled.input
-   (-> (fn [type]
-         [[:.ui.label (name type)]
-          [:input {:type "number" :min 0 :step 1
-                   :value (str (get (rum/react init) type))
-                   :on-change #(do (swap! init assoc type
-                                          (-> % .-target .-value js/parseInt)) nil)}]])
-       (mapcat [:high :medium :low :accommodator]))])
+   (->> [:high :medium :low :accommodator]
+        (map-indexed (fn [k type]
+                       [[:.ui.label {:key (str k ".1")} (name type)]
+                        [:input {:key (str k ".2") :type "number" :min 0 :step 1
+                                 :value (str (get (rum/react init) type))
+                                 :on-change #(do (swap! init assoc type
+                                                        (-> % .-target .-value js/parseInt)) nil)}]]))
+        (apply concat))])
 
 ;; contains initial population or previous step data to feed to main
 ;; computation loop.
