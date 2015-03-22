@@ -229,7 +229,7 @@ cycles'. The last cycle is the one that will be fed to the next
     [:.ui.red.button {:on-click stop}
      "Stop"]))
 
-(rum/defc circle < rum/static [key x y position selected]
+(defn circle [key x y position selected]
   [:circle {:key key
             :style {:fill (if (= position selected)
                             "red"
@@ -240,7 +240,7 @@ cycles'. The last cycle is the one that will be fed to the next
             :cz 10
             :r 2}])
 
-(rum/defc line < rum/static [key x1 y1 x2 y2]
+(defn line [key x1 y1 x2 y2]
   [:line {:key key
           :style {:stroke "steelblue"
                   :stroke-width 1}
